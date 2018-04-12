@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package proto;
+
+message StorageConfig {
+    string account_name = 1;
+    string account_key = 2;
+    string container = 3;
+}
+
+message OpenContextReq {
+    string image = 1;
+    StorageConfig storage_config = 2;
+    string source_worktree_id = 3;
+    string worktree_id = 4;
+    string mount_point = 5;
+    uint32 autosave_interval = 6;
+    repeated uint32 ports = 7;
+    repeated string env = 8;
+    repeated string execConfigRoots = 9;
+}
+
+message OpenContextResp {
+    string context_id = 1;
+    string grpc_endpoint = 2;
+
+    message PortEndpoint {
+        uint32 port = 1;
+        string endpoint = 2;
+    }
+
+    repeated PortEndpoint port_endpoints = 3;
+}
+
+message CloseContextReq {
+    string context_id = 1;
+}
+
+message CloseContextResp {
+}
+
+message CloseAllReq {
+}
+
+message CloseAllResp {
+}
+
+service AgentService {
+    rpc OpenContext(OpenContextReq) returns (OpenContextResp) {
+    }
+    rpc CloseContext(CloseContextReq) returns (CloseContextResp) {
+    }
+    rpc CloseAll(CloseAllReq) returns (CloseAllResp) {
+    }
+}
